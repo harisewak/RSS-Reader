@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
 import com.harisewak.rssreader.R
 import com.harisewak.rssreader.common.Constants
@@ -25,14 +27,7 @@ class FeedsFragment : Fragment() {
         DependencyProvider.feedsAdapter()
     }
     private val viewModel: FeedsViewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            FeedsViewModel.Companion.FeedsViewModelFactory(
-                DependencyProvider.feedsUseCase(),
-                // putting this as default url for now
-                Constants.URL_FEED_BACKCHANNEL
-            )
-        ).get(FeedsViewModel::class.java)
+        DependencyProvider.feedsViewModel(requireActivity())
     }
 
     override fun onCreateView(
@@ -50,6 +45,17 @@ class FeedsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mAdapter.setListener { article ->
+
+            viewModel.setCurrentArticle(article)
+
+            findNavController()
+                .navigate(
+                    FeedsFragmentDirections
+                        .actionFeedsFragmentToFeedDetailFragment()
+                )
+        }
 
         binding.rvFeeds.apply {
             adapter = mAdapter

@@ -8,7 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.harisewak.rssreader.databinding.ItemFeedViewBinding
 import com.prof.rssparser.Article
 
-class FeedsAdapter : ListAdapter<Article, FeedItemViewHolder>(DIFF_CALLBACK) {
+class FeedsAdapter() : ListAdapter<Article, FeedItemViewHolder>(DIFF_CALLBACK) {
+    private lateinit var click: (article: Article) -> Unit
+    fun setListener(click: (article: Article) -> Unit) {
+        this.click = click
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedItemViewHolder {
         val binding = ItemFeedViewBinding.inflate(
@@ -23,7 +27,7 @@ class FeedsAdapter : ListAdapter<Article, FeedItemViewHolder>(DIFF_CALLBACK) {
     }
 
     override fun onBindViewHolder(holder: FeedItemViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        holder.bind(currentList[position], click)
     }
 
 
