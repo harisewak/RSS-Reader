@@ -39,6 +39,31 @@ class FeedsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setAdapterListeners()
+
+        bindAdapter()
+
+        observeData()
+    }
+
+    private fun observeData() {
+        viewModel.channel.observe(viewLifecycleOwner) {
+            Log.d(TAG, "onViewCreated: channel name -> ${it.title}")
+
+            mAdapter.submitList(it.rssFeeds)
+        }
+    }
+
+    private fun bindAdapter() {
+        binding.rvFeeds.apply {
+            adapter = mAdapter
+            addItemDecoration(
+                DependencyProvider.divider()
+            )
+        }
+    }
+
+    private fun setAdapterListeners() {
         mAdapter.setClickListener { article ->
 
             viewModel.setCurrentArticle(article)
@@ -62,20 +87,6 @@ class FeedsFragment : Fragment() {
                 viewModel.updateBookmarkStatus(guid, false)
                 unBookmarkedAction.invoke()
             }
-        }
-
-        binding.rvFeeds.apply {
-            adapter = mAdapter
-            addItemDecoration(
-                DependencyProvider.divider()
-            )
-        }
-
-
-        viewModel.channel.observe(viewLifecycleOwner) {
-            Log.d(TAG, "onViewCreated: channel name -> ${it.title}")
-
-            mAdapter.submitList(it.rssFeeds)
         }
     }
 

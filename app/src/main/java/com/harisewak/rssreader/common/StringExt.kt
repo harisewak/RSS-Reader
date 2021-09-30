@@ -6,7 +6,7 @@ import android.text.Spannable
 import android.text.Spanned
 
 @Suppress("deprecation")
-fun String?.withHtmlFormatting(): Spanned {
+fun String?.toHtml(): Spanned {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         Html.fromHtml(
             this,

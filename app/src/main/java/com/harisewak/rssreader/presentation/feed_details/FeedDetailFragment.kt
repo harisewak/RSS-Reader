@@ -6,13 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.harisewak.rssreader.R
-import com.harisewak.rssreader.common.withHtmlFormatting
+import com.harisewak.rssreader.common.toHtml
+import com.harisewak.rssreader.data.model.RssFeed
 import com.harisewak.rssreader.databinding.FragmentFeedDetailBinding
 import com.harisewak.rssreader.di.DependencyProvider
 import com.harisewak.rssreader.presentation.feeds.FeedsViewModel
+import kotlinx.coroutines.launch
 
 const val TAG = "FeedDetailFragment"
 
@@ -41,15 +43,48 @@ class FeedDetailFragment : Fragment() {
         viewModel.article.observe(viewLifecycleOwner) { article ->
             Log.d(TAG, "onViewCreated: article title -> ${article.title}")
 
-            with(binding) {
-                tvHeadline.text = article.title
-                tvContent.text = article.content.withHtmlFormatting()
-                ivFeedImage.load(article.imageUrl) {
-                    crossfade(true)
-                    placeholder(R.drawable.im_default_feed_image)
-                }
-            }
+            setData(article)
         }
 
+    }
+
+    private fun setData(article: RssFeed) {
+        with(binding) {
+            tvHeadline.text = article.title
+            tvContent.text = article.content.toHtml()
+            ivFeedImage.load(article.imageUrl) {
+                crossfade(true)
+                placeholder(R.drawable.im_default_feed_image)
+            }
+            if (article.isBookmarked) {
+                ivBookmark.setImageResource(
+                    R.drawable.ic_bookmarked
+                )
+            } else {
+                ivBookmark.setImageResource(
+                    R.drawable.ic_unbookmarked
+                )
+            }
+
+            ivBookmark.setOnClickListener {
+                lifecycleScope.launch {
+                    if (article.isBookmarked) {
+                        // update status as unbookmarked in db
+                        viewModel.updateBookmarkStatus(article.guid, false)
+                        // then update UI to reflect the same
+                        ivBookmark.setImageResource(R.drawable.ic_unbookmarked)
+                        article.isBookmarked = false
+                    } else {
+                        // update status as bookmarked in db
+                        viewModel.updateBookmarkStatus(article.guid, true)
+                        // then update UI to reflect the same
+                        ivBookmark.setImageResource(R.drawable.ic_bookmarked)
+                        article.isBookmarked = true
+                    }
+
+                }
+            }
+
+        }
     }
 }
