@@ -8,4 +8,8 @@ class GetFeedsUseCase(
 
     suspend fun getFeeds(url: String) = repository.getFeeds(url)
 
+    suspend fun updateBookmarkStatus(guid: String, isBookmarked: Boolean) {
+        repository.updateBookmarkStatus(guid, isBookmarked)
+    }
+
 }

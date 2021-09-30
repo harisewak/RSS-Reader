@@ -5,19 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.*
-import com.harisewak.rssreader.R
-import com.harisewak.rssreader.common.Constants
-import com.harisewak.rssreader.data.repository.FeedsRepository
 import com.harisewak.rssreader.databinding.FragmentFeedsBinding
-import com.harisewak.rssreader.databinding.ItemFeedViewBinding
 import com.harisewak.rssreader.di.DependencyProvider
-import com.harisewak.rssreader.domain.usecase.GetFeedsUseCase
-import com.prof.rssparser.Article
+import kotlinx.coroutines.launch
 
 const val TAG = "FeedsFragment"
 
@@ -46,7 +39,7 @@ class FeedsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mAdapter.setListener { article ->
+        mAdapter.setClickListener { article ->
 
             viewModel.setCurrentArticle(article)
 
@@ -55,6 +48,20 @@ class FeedsFragment : Fragment() {
                     FeedsFragmentDirections
                         .actionFeedsFragmentToFeedDetailFragment()
                 )
+        }
+
+        mAdapter.setBookmarkedListener { guid, bookmarkedAction ->
+            lifecycleScope.launch {
+                viewModel.updateBookmarkStatus(guid, true)
+                bookmarkedAction.invoke()
+            }
+        }
+
+        mAdapter.setUnBookmarkedListener { guid, unBookmarkedAction ->
+            lifecycleScope.launch {
+                viewModel.updateBookmarkStatus(guid, false)
+                unBookmarkedAction.invoke()
+            }
         }
 
         binding.rvFeeds.apply {
@@ -68,7 +75,7 @@ class FeedsFragment : Fragment() {
         viewModel.channel.observe(viewLifecycleOwner) {
             Log.d(TAG, "onViewCreated: channel name -> ${it.title}")
 
-            mAdapter.submitList(it.articles)
+            mAdapter.submitList(it.rssFeeds)
         }
     }
 

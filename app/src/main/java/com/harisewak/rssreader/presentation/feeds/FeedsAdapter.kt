@@ -4,14 +4,21 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import com.harisewak.rssreader.data.model.RssFeed
 import com.harisewak.rssreader.databinding.ItemFeedViewBinding
-import com.prof.rssparser.Article
 
-class FeedsAdapter() : ListAdapter<Article, FeedItemViewHolder>(DIFF_CALLBACK) {
-    private lateinit var click: (article: Article) -> Unit
-    fun setListener(click: (article: Article) -> Unit) {
+class FeedsAdapter() : ListAdapter<RssFeed, FeedItemViewHolder>(DIFF_CALLBACK) {
+    private lateinit var click: (article: RssFeed) -> Unit
+    private lateinit var bookmarkedAction: (guid: String, () -> Unit) -> Unit
+    private lateinit var unBookmarkedAction: (guid: String, () -> Unit) -> Unit
+    fun setClickListener(click: (article: RssFeed) -> Unit) {
         this.click = click
+    }
+    fun setBookmarkedListener(click: (guid: String, () -> Unit) -> Unit) {
+        this.bookmarkedAction = click
+    }
+    fun setUnBookmarkedListener(click: (guid: String, () -> Unit) -> Unit) {
+        this.unBookmarkedAction = click
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedItemViewHolder {
@@ -27,7 +34,12 @@ class FeedsAdapter() : ListAdapter<Article, FeedItemViewHolder>(DIFF_CALLBACK) {
     }
 
     override fun onBindViewHolder(holder: FeedItemViewHolder, position: Int) {
-        holder.bind(currentList[position], click)
+        holder.bind(
+            currentList[position],
+            click,
+            bookmarkedAction,
+            unBookmarkedAction
+        )
     }
 
 
@@ -35,20 +47,20 @@ class FeedsAdapter() : ListAdapter<Article, FeedItemViewHolder>(DIFF_CALLBACK) {
 
         val DIFF_CALLBACK =
 
-            object : DiffUtil.ItemCallback<Article>() {
+            object : DiffUtil.ItemCallback<RssFeed>() {
 
                 override
                 fun areItemsTheSame(
-                    oldArticle: Article, newArticle: Article
+                    oldRssFeed: RssFeed, newRssFeed: RssFeed
                 ): Boolean {
-                    return oldArticle.guid == newArticle.guid
+                    return oldRssFeed.guid == newRssFeed.guid
                 }
 
                 override
                 fun areContentsTheSame(
-                    oldArticle: Article, newArticle: Article
+                    oldRssFeed: RssFeed, newRssFeed: RssFeed
                 ): Boolean {
-                    return oldArticle.equals(newArticle)
+                    return oldRssFeed.equals(newRssFeed)
                 }
             }
     }

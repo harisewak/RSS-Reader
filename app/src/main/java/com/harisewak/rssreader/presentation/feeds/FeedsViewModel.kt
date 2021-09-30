@@ -1,6 +1,8 @@
 package com.harisewak.rssreader.presentation.feeds
 
 import androidx.lifecycle.*
+import com.harisewak.rssreader.data.model.RSSChannel
+import com.harisewak.rssreader.data.model.RssFeed
 import com.harisewak.rssreader.domain.usecase.GetFeedsUseCase
 import com.prof.rssparser.Article
 import com.prof.rssparser.Channel
@@ -12,15 +14,19 @@ class FeedsViewModel(
     private val url: String
 ) : ViewModel() {
 
-    fun setCurrentArticle(article: Article) {
+    fun setCurrentArticle(article: RssFeed) {
         _article.value = article
     }
 
-    private val _channel = MutableLiveData<Channel>()
-    val channel: LiveData<Channel> = _channel
+    suspend fun updateBookmarkStatus(guid: String, isBookmarked: Boolean) {
+        useCase.updateBookmarkStatus(guid, isBookmarked)
+    }
 
-    private val _article = MutableLiveData<Article>()
-    val article: LiveData<Article> = _article
+    private val _channel = MutableLiveData<RSSChannel>()
+    val channel: LiveData<RSSChannel> = _channel
+
+    private val _article = MutableLiveData<RssFeed>()
+    val article: LiveData<RssFeed> = _article
 
     init {
         // trigger userCase here in a coroutine

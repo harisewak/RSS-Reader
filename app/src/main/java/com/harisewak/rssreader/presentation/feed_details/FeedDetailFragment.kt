@@ -44,7 +44,7 @@ class FeedDetailFragment : Fragment() {
             with(binding) {
                 tvHeadline.text = article.title
                 tvContent.text = article.content.withHtmlFormatting()
-                ivFeedImage.load(article.image) {
+                ivFeedImage.load(article.imageUrl) {
                     crossfade(true)
                     placeholder(R.drawable.im_default_feed_image)
                 }

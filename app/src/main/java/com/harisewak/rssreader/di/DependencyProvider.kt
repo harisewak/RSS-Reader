@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.harisewak.rssreader.RSSReaderApp
 import com.harisewak.rssreader.common.Constants
 import com.harisewak.rssreader.data.repository.FeedsRepository
+import com.harisewak.rssreader.data.repository.local.LocalDatabase
 import com.harisewak.rssreader.domain.usecase.GetFeedsUseCase
 import com.harisewak.rssreader.presentation.feeds.FeedsAdapter
 import com.harisewak.rssreader.presentation.feeds.FeedsViewModel
-import com.prof.rssparser.Article
 import com.prof.rssparser.Parser
 import java.nio.charset.Charset
 
@@ -45,4 +45,9 @@ object DependencyProvider {
                 )
             ).get(FeedsViewModel::class.java)
     }
+
+    fun bookmarkDao() = LocalDatabase.getInstance(
+        appContext()
+    )
+        .bookmarkDao()
 }
