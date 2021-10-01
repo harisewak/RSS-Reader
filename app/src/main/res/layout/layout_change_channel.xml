@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_change_channel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_change_channel">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:lines="1"
+                android:imeOptions="actionGo"
+                android:inputType="textWebEmailAddress"
+                android:id="@+id/et_change_channel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/bt_change_channel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/til_change_channel"
+            android:layout_margin="8dp"
+            android:text="@string/btn_load"
+             />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

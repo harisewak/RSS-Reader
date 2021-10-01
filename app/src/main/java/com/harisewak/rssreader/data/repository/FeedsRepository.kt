@@ -59,12 +59,12 @@ class FeedsRepository(
     private suspend fun createRssFeed(article: Article) = RssFeed(
         article.guid!!,
         title = article.title!!,
-        imageUrl = article.image!!,
+        imageUrl = article.image ?: Constants.ERR_IMAGE_NOT_AVAILABLE,
         content = getContentOrDesc(article),
         isBookmarked = DependencyProvider
             .bookmarkDao()
             .isBookmarkedWithLog(article.guid!!),
-        link = article.link!!
+        link = article.link ?: Constants.ERR_LINK_NOT_AVAILABLE
     )
 
     private suspend fun BookmarkDao.isBookmarkedWithLog(guid: String): Boolean {

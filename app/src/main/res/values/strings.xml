@@ -6,4 +6,8 @@
     <string name="btn_retry">Retry</string>
     <string name="text_share_via">Share via</string>
     <string name="btn_share">Share</string>
+    <string name="hint_change_channel">Enter channel URL..</string>
+    <string name="btn_load">Load</string>
+    <string name="msg_invalid_url">Invalid URL. Did you make a typing error?</string>
+    <string name="menu_change_channel">Change Channel</string>
 </resources>
