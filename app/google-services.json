@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "849585825168",
+    "project_id": "rss-reader-aa646",
+    "storage_bucket": "rss-reader-aa646.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849585825168:android:412a471aa84416b6327f15",
+        "android_client_info": {
+          "package_name": "com.harisewak.rssreader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "849585825168-83v8r7qdmhl9lc7fsd65utsnjoutmkpl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9Yw9gF41LtrTTnFY1wlobvXHNI_sCjQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "849585825168-83v8r7qdmhl9lc7fsd65utsnjoutmkpl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
