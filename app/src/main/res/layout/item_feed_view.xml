@@ -5,13 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/iv_feed_image"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_feed_image"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/im_default_feed_image"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/content_des_feed_image" />
+
     <TextView
         android:id="@+id/tv_headline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:padding="4dp"
@@ -19,7 +32,7 @@
         app:layout_constraintEnd_toStartOf="@+id/iv_bookmark"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_feed_image"
         tools:text="Headline" />
 
     <ImageView

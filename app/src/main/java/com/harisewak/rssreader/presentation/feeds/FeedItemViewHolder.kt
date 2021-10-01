@@ -1,6 +1,7 @@
 package com.harisewak.rssreader.presentation.feeds
 
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.harisewak.rssreader.R
 import com.harisewak.rssreader.data.model.RssFeed
 import com.harisewak.rssreader.databinding.ItemFeedViewBinding
@@ -18,9 +19,6 @@ class FeedItemViewHolder(
     ) {
         with(binding) {
             tvHeadline.text = article.title
-            itemView.setOnClickListener {
-                click.invoke(article)
-            }
 
             if (article.isBookmarked) {
                 ivBookmark.setImageResource(
@@ -31,6 +29,16 @@ class FeedItemViewHolder(
                     R.drawable.ic_unbookmarked
                 )
             }
+
+            ivFeedImage.load(article.imageUrl) {
+                crossfade(true)
+                placeholder(R.drawable.im_default_feed_image)
+            }
+
+            itemView.setOnClickListener {
+                click.invoke(article)
+            }
+
 
             ivBookmark.setOnClickListener {
                 if (article.isBookmarked) {
