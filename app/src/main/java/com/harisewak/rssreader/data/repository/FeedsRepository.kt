@@ -63,11 +63,11 @@ class FeedsRepository(
         content = getContentOrDesc(article),
         isBookmarked = DependencyProvider
             .bookmarkDao()
-//            .isBookmarked(article.guid!!)
-            .isBookmarkedWithLog(article.guid!!)
+            .isBookmarkedWithLog(article.guid!!),
+        link = article.link!!
     )
 
-    suspend fun BookmarkDao.isBookmarkedWithLog(guid: String): Boolean {
+    private suspend fun BookmarkDao.isBookmarkedWithLog(guid: String): Boolean {
         val isBookmarked = isBookmarked(guid)
         Log.d(TAG, "isBookmarkedWithLog: guid -> $guid, isBookmarked -> $isBookmarked")
         return isBookmarked

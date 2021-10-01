@@ -15,6 +15,10 @@ import com.harisewak.rssreader.databinding.FragmentFeedDetailBinding
 import com.harisewak.rssreader.di.DependencyProvider
 import com.harisewak.rssreader.presentation.feeds.FeedsViewModel
 import kotlinx.coroutines.launch
+import android.content.Intent
+
+
+
 
 const val TAG = "FeedDetailFragment"
 
@@ -85,6 +89,18 @@ class FeedDetailFragment : Fragment() {
                 }
             }
 
+            btShare.setOnClickListener {
+                shareFeed(article)
+            }
+
         }
+    }
+
+    private fun shareFeed(article: RssFeed) {
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, article.title)
+        shareIntent.putExtra(Intent.EXTRA_TEXT, article.link)
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.text_share_via)))
     }
 }

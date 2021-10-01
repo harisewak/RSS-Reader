@@ -5,5 +5,6 @@ data class RssFeed(
     val title: String,
     val imageUrl: String,
     val content: String,
+    val link: String,
     var isBookmarked: Boolean = false
 )
