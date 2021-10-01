@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
+import com.harisewak.rssreader.R
+import com.harisewak.rssreader.common.Failure
+import com.harisewak.rssreader.common.Success
 import com.harisewak.rssreader.databinding.FragmentFeedsBinding
 import com.harisewak.rssreader.di.DependencyProvider
 import kotlinx.coroutines.launch
@@ -47,10 +51,29 @@ class FeedsFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.channel.observe(viewLifecycleOwner) {
-            Log.d(TAG, "onViewCreated: channel name -> ${it.title}")
+        viewModel.channel.observe(viewLifecycleOwner) { result ->
 
-            mAdapter.submitList(it.rssFeeds)
+            when(result) {
+                is Success -> {
+                    result.channel?.let {
+                        Log.d(TAG, "onViewCreated: channel name -> ${it.title}")
+                        mAdapter.submitList(it.rssFeeds)
+                    }
+                }
+
+                is Failure -> {
+                    result.error?.let {
+                        Snackbar.
+                        make(binding.root, it, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(getString(R.string.btn_retry)) {
+                                viewModel.getFeeds()
+                            }
+                            .show()
+                    }
+                }
+            }
+
+
         }
     }
 

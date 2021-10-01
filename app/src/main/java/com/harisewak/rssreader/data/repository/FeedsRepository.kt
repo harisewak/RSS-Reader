@@ -2,6 +2,9 @@ package com.harisewak.rssreader.data.repository
 
 import android.util.Log
 import com.harisewak.rssreader.common.Constants
+import com.harisewak.rssreader.common.Failure
+import com.harisewak.rssreader.common.Result
+import com.harisewak.rssreader.common.Success
 import com.harisewak.rssreader.data.model.RSSChannel
 import com.harisewak.rssreader.data.model.RssFeed
 import com.harisewak.rssreader.data.repository.local.BookmarkDao
@@ -18,7 +21,7 @@ class FeedsRepository(
 
     suspend fun getFeeds(
         url: String
-    ): RSSChannel {
+    ): Result {
         Log.d(TAG, "getFeeds: called")
 
         return try {
@@ -26,14 +29,15 @@ class FeedsRepository(
                 .xmlParser()
                 .getChannel(url)
 
-            // push data into our RssChannel
+            // push data into RssChannel
             val rssChannel = createRssChannel(channel)
-            // expose our RssChannel
-            rssChannel
+            // expose RssChannel
+            Success(rssChannel)
+
         } catch (e: Exception) {
             e.printStackTrace()
-            // Handle the exception
-            throw Error("Error occurred while trying to read RSS Feed")
+            Log.d(TAG, "getFeeds: ${e.localizedMessage}")
+            Failure(Constants.ERR_SERVER_ERROR)
         }
     }
 

@@ -1,11 +1,9 @@
 package com.harisewak.rssreader.presentation.feeds
 
 import androidx.lifecycle.*
-import com.harisewak.rssreader.data.model.RSSChannel
+import com.harisewak.rssreader.common.Result
 import com.harisewak.rssreader.data.model.RssFeed
 import com.harisewak.rssreader.domain.usecase.GetFeedsUseCase
-import com.prof.rssparser.Article
-import com.prof.rssparser.Channel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -22,14 +20,17 @@ class FeedsViewModel(
         useCase.updateBookmarkStatus(guid, isBookmarked)
     }
 
-    private val _channel = MutableLiveData<RSSChannel>()
-    val channel: LiveData<RSSChannel> = _channel
+    private val _channel = MutableLiveData<Result>()
+    val channel: LiveData<Result> = _channel
 
     private val _article = MutableLiveData<RssFeed>()
     val article: LiveData<RssFeed> = _article
 
     init {
-        // trigger userCase here in a coroutine
+        getFeeds()
+    }
+
+    fun getFeeds() {
         viewModelScope.launch(
             Dispatchers.IO
         ) {
